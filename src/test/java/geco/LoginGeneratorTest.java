@@ -23,7 +23,7 @@ public class LoginGeneratorTest {
 
 
         assertEquals("PDUR", loginGenerator.generateLoginForNomAndPrenom("Durand", "Paul"));
-        
+
         assertEquals("JRAL2", loginGenerator.generateLoginForNomAndPrenom("Ralling", "John"));
 
 
