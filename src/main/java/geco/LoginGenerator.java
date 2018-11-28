@@ -4,25 +4,32 @@ import java.text.Normalizer;
 import java.util.regex.Pattern;
 
 /**
- * Classe representant un generateur de login
+ * Classe representant un generateur de login.
  */
 public class LoginGenerator {
 
+    /**
+     * Le login service.
+     *
+     * @see LoginService
+     */
     private LoginService loginService;
 
     /**
-     * Construit un login generator
+     * Construit un login generator.
      *
-     * @param loginService le service de login
+     * @param logService le service de login
      */
-    public LoginGenerator(LoginService loginService) {
-        this.loginService = loginService;
+    public LoginGenerator(final LoginService logService) {
+        this.loginService = logService;
     }
 
     /**
-     * Genere un login unique a partir d'un nom et d'un prenom en prenant la premiere lettre du prenom, concatenee avec
-     * les 3 premieres lettres du nom, le tout mis en lettres capitales et desaccentue. Le login genere doit etre unique
-     * par rapport a la liste des logins existants. En cas de doublon, on incremente le doublon d'un indice. Ci dessous des
+     * Genere un login unique a partir d'un nom et d'un prenom en prenant la
+     * premiere lettre du prenom, concatenee avec les 3 premieres lettres du
+     * nom, le tout mis en lettres capitales et desaccentue. Le login genere
+     * doit etre unique par rapport a la liste des logins existants. En cas
+     * de doublon, on incremente le doublon d'un indice. Ci dessous des
      * exemples :
      * <ul>
      * <li>Paul Dupond -> PDUP </li>
@@ -35,13 +42,15 @@ public class LoginGenerator {
      * @param prenom le prenom
      * @return le login genere
      */
-    public String generateLoginForNomAndPrenom(String nom, String prenom) {
+    public final String generateLoginForNomAndPrenom(final String nom,
+                                               final String prenom) {
         String p = deAccent(prenom.substring(0, 1).toUpperCase());
         String n;
-        if (nom.length() > 2)
-            n = deAccent(nom.substring(0, 3).toUpperCase());
-        else
+        if (nom.length() > 2) {
+            n = deAccent(nom.substring(0, 2 + 1).toUpperCase());
+        } else {
             n = deAccent(nom.substring(0, 2).toUpperCase());
+        }
         String login = p + n;
         int cpt = 1;
         if (loginService.loginExists(login)) {
@@ -56,13 +65,14 @@ public class LoginGenerator {
     }
 
     /**
-     * Supprime les accents d'une chaine de caractere
+     * Supprime les accents d'une chaine de caractere.
      *
      * @param str la chaine de caractere
      * @return la chaine de caractere sans accents
      */
-    private String deAccent(String str) {
-        String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
+    private String deAccent(final String str) {
+        String nfdNormalizedString = Normalizer.normalize(str,
+                Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(nfdNormalizedString).replaceAll("");
     }
